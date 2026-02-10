@@ -1,0 +1,250 @@
+/* ===== Reset ===== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: #f6f6f6;
+  overflow-x: hidden;
+}
+
+:root{
+  --menu-width: 260px;
+  --header-height: 150px;
+
+  --menu-bg: #000;
+  --btn-blue: #0000ff;
+  --btn-blue-hover: #001db3;
+
+  --gold: #c59a2b;         /* dropdown gold-ish like screenshot */
+  --gold-dark: #a8801d;    /* hover gold */
+
+  --card-width: 275px;
+  --gap: 50px;
+}
+
+/* =========================
+   LEFT MENU (fixed black bar)
+   ========================= */
+#sideMenu{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--menu-width);
+  height: 100vh;
+  background: var(--menu-bg);
+}
+
+/* Blue navigation buttons */
+.sideBtn{
+  display: block;
+  width: 100%;
+  background: var(--btn-blue);
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 22px;
+  padding: 16px 10px;
+  border-bottom: 2px solid rgba(0,0,0,0.55);
+}
+
+/* Hover for nav buttons */
+.sideBtn:hover{
+  background: var(--btn-blue-hover);
+}
+
+/* =========================
+   Recent Articles dropdown
+   MUST expand DOWN and push others down
+   ========================= */
+.sideDropdown{
+  /* IMPORTANT: no absolute positioning, stays in normal flow */
+  display: block;
+}
+
+/* When hovering Recent Articles, make the button gold like screenshot */
+.sideDropdown:hover > .sideBtn{
+  background: var(--gold);
+  color: #fff;
+}
+
+/* The dropdown panel itself (in-flow, expands downward) */
+.sideDropdownContent{
+  background: var(--gold);
+  overflow: hidden;
+
+  /* closed state */
+  max-height: 0;
+  transition: max-height 0.4s ease; /* menu reveal speed */
+}
+
+/* open state on hover */
+.sideDropdown:hover .sideDropdownContent{
+  max-height: 500px; /* enough for all 10 links */
+}
+
+/* dropdown links */
+.sideDropdownContent a{
+  display: block;
+  padding: 4px 0;
+  text-align: center;
+  text-decoration: none;
+  font-size: 22px;
+  color: #0000ff; /* blue link text like screenshot */
+  background: transparent;
+
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* hover on dropdown links: font + background changes */
+.sideDropdownContent a:hover{
+  background: var(--btn-blue);
+  color: #ffffff;
+}
+
+/* =========================
+   MAIN area pushed right
+   ========================= */
+main{
+  margin-left: var(--menu-width);
+  padding-top: var(--header-height);
+  padding-left: 40px;
+  padding-right: 40px;
+  width: calc(100% - var(--menu-width));
+}
+
+/* =========================
+   TOP RED HEADER
+   ========================= */
+.topHeader{
+  position: fixed;
+  top: 0;
+  left: var(--menu-width);
+  width: calc(100% - var(--menu-width));
+  height: var(--header-height);
+  background: #ff0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.topHeader p{
+  margin: 0;
+  font-size: 46px;
+  font-weight: 400;
+  color: #000;
+}
+
+/* Title under header */
+main > h1{
+  text-align: center;
+  margin: 34px 0 18px;
+  font-size: 38px;
+  font-weight: 800;
+  color: #111;
+}
+
+/* =========================
+   ARTICLES GRID
+   ========================= */
+#container{
+  display: grid;
+  gap: var(--gap);
+  justify-content: center;
+  align-content: start;
+  margin: 0 auto;
+
+  grid-template-columns: repeat(auto-fit, var(--card-width));
+}
+
+#container article{
+  width: var(--card-width);
+  min-width: 0;
+
+  /* start light */
+  color: rgba(0,0,0,0.35);
+
+  /* NO background (per your request) */
+  background: transparent;
+
+  /* hover expansion effect */
+  transform: scale(1);
+  transition: color 2s ease, transform 2s ease;
+}
+
+/* On hover: darker + expand (2 seconds) */
+#container article:hover{
+  color: rgba(0,0,0,0.92);
+  transform: scale(1.04);
+}
+
+/* headings */
+#container article h2{
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* paragraphs: make lines even */
+#container article p{
+  margin: 0 0 10px;
+  line-height: 1;
+  text-align: justify;  /* makes text look even like screenshot */
+  
+}
+
+/* FIRST LETTER: only the main text paragraph, not Read more */
+#container article > p:first-of-type::first-letter{
+  font-family: "Times New Roman", Times, serif;
+  font-size: 36px;
+  line-height: 1;
+}
+
+/* Read more styling (blue like screenshot) */
+.readMore a{
+  color: #0b2bd6;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* Add arrowarrow.svg to any link pointing to Google */
+a[href*="google"]::after{
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 6px;
+  vertical-align: text-bottom;
+  background-image: url("arrowarrow.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* Responsive columns like before */
+@media (max-width: 1400px){
+  #container{ grid-template-columns: repeat(3, var(--card-width)); }
+}
+@media (max-width: 1100px){
+  #container{ grid-template-columns: repeat(2, var(--card-width)); }
+}
+@media (max-width: 760px){
+  #container{ grid-template-columns: repeat(1, var(--card-width)); }
+}
+
+/* Thank you box (bottom-right like screenshot-ish) */
+#thanks{
+  position: fixed;
+  right: 0px;
+  bottom: 18px;
+  padding: 16px 18px;
+  font-size: 38px;
+  line-height: 1.1;
+  background: #9fd3f6;
+  border: 2px solid #2b2b2b;
+  color: #0a0a0a;
+  text-decoration: underline;
+}
